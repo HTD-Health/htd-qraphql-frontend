@@ -17,6 +17,12 @@ function CommentSection({ comments, commentsLoading, addComment, newCommentLoadi
 
   const uploadComment = () => {
     if (commentAuthor.length === 0 || comment.length === 0) return
+    addComment({
+      variables: {
+        username: commentAuthor,
+        commentText: comment
+      }
+    })
     changeComment("")
     changeCommentAuthor("")
   }
