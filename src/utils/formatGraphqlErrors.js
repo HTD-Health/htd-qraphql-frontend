@@ -1,7 +1,13 @@
 import { toast } from "react-semantic-toasts"
 
 const prepareMessage = (error) => {
-  return "Error"
+  if(error !== undefined) {
+    if(error.graphQLErrors.length > 0) {
+      return error.graphQLErrors
+    }
+    return error.networkError.result.errors[0].message
+  }
+  return ''
 }
 
 

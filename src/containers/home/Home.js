@@ -27,6 +27,13 @@ function Home({addTweet, tweets, tweetsLoading, removeTweet, fetchMore}) {
   const uploadTweet = e => {
     if (author.length === 0 || tweet.length === 0) return
     if (e) e.preventDefault()
+    addTweet({
+      variables: {
+        text: tweet,
+        username: author
+      }
+    })
+
     setTweet('')
     setAuthor('')
   }
