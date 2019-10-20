@@ -8,13 +8,14 @@ import ADD_TWEET from './addTweet.gql'
 import REMOVE_TWEET from './removeTweet.gql'
 
 const withQuery = Component => props => (
-  <Query query={GET_TWEETS} >
-    {({ loading, error, data }) => (
+  <Query query={GET_TWEETS}>
+    {({ loading, error, data, fetchMore }) => (
       <Component 
         {...props} 
         tweets={data} 
         tweetsLoading={loading} 
-        tweetsError={formatGraphqlErrors(error)} 
+        tweetsError={formatGraphqlErrors(error)}
+        fetchMore={fetchMore}
       />
     )}
   </Query>

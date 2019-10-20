@@ -4,6 +4,7 @@ import { Form, Button, Item } from 'semantic-ui-react'
 import Spinner from '../../components/Spinner'
 
 import Tweet from '../../components/Tweet'
+import { paginationLimit } from './getTweets.gql'
 
 // const itemsPerPage = 5
 
@@ -19,8 +20,20 @@ function Home({addTweet, tweets, tweetsLoading, removeTweet, fetchMore}) {
   }
 
   const paginate = () =>  {
-    setPage(page + 1)
+    const nextPage = page + 1
+    setPage(nextPage)
     setLoading(true)
+    fetchMore({
+      variables: {
+        offset: nextPage * paginationLimit
+      },
+      updateQuery: (prev, {fetchMoreResult}) => {
+        setLoading(false)
+        if(!fetchMoreResult) return prev
+        return Object.assign({}, prev, {
+          getTweets: [...prev.getTweets, ...fetchMoreResult.getTweets]
+        })
+      }})
     }
 
 
@@ -45,6 +58,7 @@ function Home({addTweet, tweets, tweetsLoading, removeTweet, fetchMore}) {
   const renderTweet = ({ id, text, likes, user, createdAt}) => {
     return <Tweet createdAt={createdAt} withModal key={id} removeTweet={removeTweet} id={id} userId={user? user.id : '3'} likes={likes} tweet={text} avatar={user && user.avatar} name={user? user.username : 'null'} ></Tweet>
   }
+
 
   return (
     <HomeContainer>
@@ -71,6 +85,8 @@ function Home({addTweet, tweets, tweetsLoading, removeTweet, fetchMore}) {
           {tweetsLoading && <Spinner />}
           {tweets && tweets.getTweets && tweets.getTweets.map(renderTweet)}
         </Item.Group>
+        {loading && <Spinner />}
+        <Button onClick={paginate}>Załaduj więcej</Button>
       </HomePanel>
     </HomeContainer>
   )
