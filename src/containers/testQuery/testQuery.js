@@ -1,8 +1,13 @@
 import React from 'react'
-import Spinner from '../../components/Spinner'
 
 function testQuery({loading, error, response}){
-  return <div></div>
+  console.log('loading', loading)
+  console.log('error', error)
+  console.log('response', response)
+  if(loading){
+    return <div>Loading...</div>
+  }
+  return <div>{response.helloWorld}</div>
 }
 
 export default testQuery
