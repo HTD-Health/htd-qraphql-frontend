@@ -5,6 +5,7 @@ import formatGraphqlErrors from '../../utils/formatGraphqlErrors'
 import Home from './Home'
 import GET_TWEETS from './getTweets.gql'
 import ADD_TWEET from './addTweet.gql'
+import REMOVE_TWEET from './removeTweet.gql'
 
 const withQuery = Component => props => (
   <Query query={GET_TWEETS} >
@@ -32,4 +33,17 @@ const withMutation = Component => props => (
   </Mutation>
 )
 
-export default withMutation(withQuery(Home))
+const removeMutation = Component => props => (
+  <Mutation mutation={REMOVE_TWEET} refetchQueries={['getTweets']}>
+    {(mutate, {loading, error}) => (
+      <Component
+        {...props}
+        removeTweet={mutate} 
+        removeTweetLoading={loading} 
+        removeTweetError={formatGraphqlErrors(error)} 
+      />
+    )}
+  </Mutation>
+)
+
+export default removeMutation(withMutation(withQuery(Home)))
